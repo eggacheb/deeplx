@@ -70,8 +70,13 @@ function checkIgnoreKeywords(url) {
 }
 
 async function initialize() {
-  const apiData = await redis.hgetall("urls")
-  cacheApis = [...Object.keys(apiData).filter(key => apiData[key] === "1")]
+  const apiData = await redis.hgetall("urls");
+  if (!apiData) {
+    console.error("No data found for the key 'urls'");
+    return;
+  }
+
+  cacheApis = [...Object.keys(apiData).filter(key => apiData[key] === "1")];
 }
 
 async function checkApi(apis) {
